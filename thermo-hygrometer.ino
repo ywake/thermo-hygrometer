@@ -1,11 +1,15 @@
 // ref. https://101010.fun/iot/arduino-dht11.html
 #include "DHT.h"
-# define DATA_PIN 4 // D2
+#include "wifi_connect.h"
+
+#define DATA_PIN 4 // D2
+
 DHT dht(DATA_PIN, DHT11);
 
 void setup() {
   Serial.begin(9600);
   dht.begin();
+  wifi_connect();
 }
 
 void loop() {
