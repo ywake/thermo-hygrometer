@@ -53,8 +53,8 @@ homekit_characteristic_t	g_cha_name
 // 	 = HOMEKIT_CHARACTERISTIC_(STATUS_LOW_BATTERY, 0);
 
 // example for humidity
-// homekit_characteristic_t cha_humidity
-//  = HOMEKIT_CHARACTERISTIC_(CURRENT_RELATIVE_HUMIDITY, 0);
+homekit_characteristic_t	g_cha_humidity
+	 = HOMEKIT_CHARACTERISTIC_(CURRENT_RELATIVE_HUMIDITY, 0);
 
 homekit_accessory_t			*g_accessories[] = {
 	HOMEKIT_ACCESSORY(
@@ -64,7 +64,7 @@ homekit_accessory_t			*g_accessories[] = {
 			HOMEKIT_SERVICE(
 				ACCESSORY_INFORMATION,
 				.characteristics = (homekit_characteristic_t *[]){
-					HOMEKIT_CHARACTERISTIC(NAME, "Temperature Sensor"),
+					HOMEKIT_CHARACTERISTIC(NAME, "Thermo & Hygrometer"),
 					HOMEKIT_CHARACTERISTIC(MANUFACTURER, "Arduino HomeKit"),
 					HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "0123456"),
 					HOMEKIT_CHARACTERISTIC(MODEL, "ESP8266/ESP32"),
@@ -86,16 +86,14 @@ homekit_accessory_t			*g_accessories[] = {
 					NULL
 				}
 			),
-			// Add this HOMEKIT_SERVICE if you has a HUMIDITY_SENSOR together
-			/*
 			HOMEKIT_SERVICE(
 				HUMIDITY_SENSOR,
-				.characteristics=(homekit_characteristic_t*[]) {
+				.characteristics = (homekit_characteristic_t *[]){
+					&g_cha_humidity,
 					HOMEKIT_CHARACTERISTIC(NAME, "Humidity Sensor"),
-					&cha_humidity,
 					NULL
 				}
-			),*/
+			),
 			NULL
 	}),
 	NULL

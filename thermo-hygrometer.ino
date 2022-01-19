@@ -55,28 +55,28 @@ void setup() {
 }
 
 void loop() {
-  delay(3000);
-  float humid = dht.readHumidity();
-  float temp = dht.readTemperature();
+  delay(1000);
+  // float humid = dht.readHumidity();
+  // float temp = dht.readTemperature();
 
-  if (isnan(humid) || isnan(temp)) {
-    Serial.println("Failed...");
-    return;
-  }
+  // if (isnan(humid) || isnan(temp)) {
+  //   Serial.println("Failed...");
+  //   return;
+  // }
 
-  char humidFloatString[10];
-  char tempFloatString[10];
-  dtostrf(humid, 4, 2, humidFloatString);
-  dtostrf(temp, 4, 2, tempFloatString);
+  // char humidFloatString[10];
+  // char tempFloatString[10];
+  // dtostrf(humid, 4, 2, humidFloatString);
+  // dtostrf(temp, 4, 2, tempFloatString);
 
-  char bufHumid[20];
-  char bufTemp[20];
+  // char bufHumid[20];
+  // char bufTemp[20];
 
-  sprintf(bufHumid, "Humidity: %s", humidFloatString);
-  sprintf(bufTemp, "Temperature: %s", tempFloatString);
+  // sprintf(bufHumid, "Humidity: %s", humidFloatString);
+  // sprintf(bufTemp, "Temperature: %s", tempFloatString);
 
-  Serial.println(bufHumid);
-  Serial.println(bufTemp);
+  // Serial.println(bufHumid);
+  // Serial.println(bufTemp);
 
   my_homekit_loop();
 }
@@ -88,6 +88,7 @@ void loop() {
 // access your homekit characteristics defined in my_accessory.c
 extern "C" homekit_server_config_t g_config;
 extern "C" homekit_characteristic_t g_cha_current_temperature;
+extern "C" homekit_characteristic_t g_cha_humidity;
 
 static uint32_t g_next_heap_millis = 0;
 static uint32_t g_next_report_millis = 0;
@@ -114,8 +115,11 @@ void my_homekit_loop() {
 
 void my_homekit_report() {
   float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+  LOG_D("%.1f °C, %.1f %%", temperature, humidity);
   g_cha_current_temperature.value.float_value = temperature;
-  LOG_D("Current temperature: %.1f", temperature);
   homekit_characteristic_notify(
     &g_cha_current_temperature, g_cha_current_temperature.value);
+  g_cha_humidity.value.float_value = humidity;
+  homekit_characteristic_notify(&g_cha_humidity, g_cha_humidity.value);
 }
